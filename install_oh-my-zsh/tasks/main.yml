@@ -1,0 +1,4 @@
+---
+
+- name: Install default oh-my-zsh from Github
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"

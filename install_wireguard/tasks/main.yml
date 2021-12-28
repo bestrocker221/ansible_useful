@@ -1,0 +1,22 @@
+---
+
+- name: Copy Wireguard server file
+  become: yes
+  copy:
+    src: '{{ wireguard_server_config_path }}'
+    dest: /etc/wireguard/wg0.conf
+    mode: 640
+
+- name: Enable Forwarding
+  become: yes
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: yes
+
+- name: Enable wireguard
+  become: yes
+  systemd:
+      name: wg-quick@wg0
+      enabled: yes
+      state: restarted
