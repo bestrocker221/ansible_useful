@@ -1,0 +1,8 @@
+---
+
+- name: Reboot
+  become: yes
+  reboot:
+    reboot_timeout: 20
+  async: 1
+  poll: 0

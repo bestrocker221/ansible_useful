@@ -1,4 +1,12 @@
 ---
+- name: Install GPG
+  vars:
+    packages:
+      present:
+        - gpg
+        - gpg-agent
+  include_role:
+    name: install_packages
 
 - name: Sublime text add GPG key
   become: yes

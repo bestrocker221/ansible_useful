@@ -1,0 +1,11 @@
+---
+- name: Install Spice and Guest tools
+  vars:
+    packages:
+      present:
+        - spice-vdagent
+        - qemu-guest-agent # move to role to enable them
+  include_role:
+    name: install_packages
+
+#- name: Enable Spice vdagent

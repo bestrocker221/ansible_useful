@@ -1,5 +1,18 @@
 ---
+- name: Install ZSH
+  vars:
+    packages:
+      present:
+        - zsh
+  include_role:
+    name: install_packages
 
 - name: Install default oh-my-zsh from Github
   shell: echo y |sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   ignore_errors: yes
+
+- name: Set default shell
+  become: yes
+  user:
+    name: "{{ ansible_ssh_user }}"
+    shell: /bin/zsh
