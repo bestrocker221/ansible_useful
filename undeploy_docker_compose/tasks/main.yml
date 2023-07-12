@@ -1,0 +1,18 @@
+---
+
+- name: Find Docker Compose Files
+  find:
+    paths: "/home/ubuntu"
+    patterns: "docker-compose.yml"
+    recurse: true
+  register: compose_files
+
+- name: Display paths of all .yml files in dir
+  ansible.builtin.debug: msg={{ compose_files }}
+
+- name: Run Docker Compose down
+  become: true
+  shell: |
+    cd "{{ item.path | dirname }}"
+    docker-compose down
+  loop: "{{ compose_files.files }}"

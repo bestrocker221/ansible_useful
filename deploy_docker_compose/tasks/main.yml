@@ -1,0 +1,23 @@
+---
+
+- name: Copy Docker Compose projects into remote folder
+  copy:
+    src: "{{ local_docker_compose_apps_path }}"
+    dest: "{{ remote_folder_path }}"
+
+- name: Find Docker Compose Files
+  find:
+    paths: "/home/ubuntu"
+    patterns: "docker-compose.yml"
+    recurse: true
+  register: compose_files
+
+- name: Display paths of all .yml files in dir
+  ansible.builtin.debug: msg={{ compose_files }}
+
+- name: Run Docker Compose up 
+  become: true
+  shell: |
+    cd "{{ item.path | dirname }}"
+    docker-compose up -d
+  loop: "{{ compose_files.files }}"
