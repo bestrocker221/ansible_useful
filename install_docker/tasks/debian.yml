@@ -1,8 +1,8 @@
 ---
 
-- name: Print all available facts
-  ansible.builtin.debug:
-    var: ansible_facts
+#- name: Print all available facts
+#  ansible.builtin.debug:
+#    var: ansible_facts
 
 - name: Install needed packages
   vars:
@@ -16,11 +16,14 @@
   include_role:
     name: install_packages
 
+#- name: Docker add Debian GPG key
+#  become: yes
+#  shell: rm /etc/apt/keyrings/docker.gpg; install -m 0755 -d /etc/apt/keyrings; curl -fsSL https://download.docker.com/linux/debian/gpg |  gpg --dearmor -o /etc/apt/keyrings/docker.gpg; chmod a+r /etc/apt/keyrings/docker.gpg; 
+
 - name: Docker add Debian GPG key
   become: yes
-  apt_key:
-    url: https://download.docker.com/linux/debian/gpg
-    state: present
+  shell:  curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
 
 - name: Add Docker repository into sources list using specified filename
   become: yes
@@ -33,6 +36,25 @@
         - docker-ce
         - docker-ce-cli
         - containerd.io
-        - docker-compose
+        - docker-buildx-plugin
+        - docker-compose-plugin
   include_role:
     name: install_packages
+
+- name: Add Docker Compose
+  become: yes
+  shell: curl -s https://api.github.com/repos/docker/compose/releases/latest | grep browser_download_url  | grep docker-compose-linux-x86_64 | cut -d '"' -f 4 | wget -qi -; chmod +x docker-compose-linux-x86_64; mv docker-compose-linux-x86_64 /usr/local/bin/docker-compose
+
+- name: Enable Docker service
+  become: yes
+  systemd:
+    name: docker
+    enabled: yes
+  ignore_errors: yes  # Ignore errors if the Docker service is not installed or found
+
+- name: Start Docker service
+  become: yes
+  systemd:
+    name: docker
+    state: started
+  ignore_errors: yes  # Ignore errors if the Docker service is not installed or found
