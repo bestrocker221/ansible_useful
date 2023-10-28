@@ -1,0 +1,17 @@
+---
+
+- name: Allow incoming traffic to specified ports
+  become: yes
+  iptables:
+    chain: INPUT
+    jump: ACCEPT
+    protocol: "{{ protocol }}"
+    destination_port: "{{ item }}"
+    action: "insert"
+    comment: "Created by ansible"
+  with_items: "{{ port_numbers | default([]) }}"
+
+- name: Save iptables rules
+  become: yes
+  command: sh -c "iptables-save > /etc/iptables/rules.v4"
+
