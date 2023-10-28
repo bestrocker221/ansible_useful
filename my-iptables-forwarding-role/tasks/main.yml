@@ -1,0 +1,23 @@
+---
+
+- name: Configure iptables forwarding
+  fail:
+    msg: "Please provide source_port, source_ip, destination_port, and destination_ip parameters."
+  when: "source_port is not defined or source_ip is not defined or destination_port is not defined or destination_ip is not defined"
+
+- name: Configure iptables forwarding
+  become: yes
+  iptables:
+    table: nat
+    chain: PREROUTING
+    jump: DNAT
+    protocol: tcp
+    destination_port: "{{ source_port }}"
+    to_destination: "{{ destination_ip }}:{{ destination_port }}"
+    action: "insert"
+    comment: "Created by ansible"
+
+- name: Save iptables rules
+  become: yes
+  command: sh -c "iptables-save > /etc/iptables/rules.v4"
+
