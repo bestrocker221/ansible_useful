@@ -1,7 +1,9 @@
 ---
 
-- include: debian.yml
-  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
+#- include: debian.yml
+#  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
-- include: archlinux.yml
-  when: ansible_facts['os_family'] == "Archlinux"
+#- include: archlinux.yml
+#  when: ansible_facts['os_family'] == "Archlinux"
+
+- include_tasks: "{{ ansible_distribution | lower }}.yml"
