@@ -19,5 +19,5 @@
   become: true
   shell: |
     cd "{{ item.path | dirname }}"
-    docker-compose up -d
+    docker compose up -d
   loop: "{{ compose_files.files }}"

@@ -1,0 +1,22 @@
+---
+# tasks file for ansible-role-nginx
+
+- name: Copy nginx.conf file
+  become: yes
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+  #notify: "Restart nginx"
+
+- name: Ensure nginx service is running and enabled
+  become: yes
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Restart nginx
+  become: yes
+  systemd:
+    name: nginx
+    state: restarted
