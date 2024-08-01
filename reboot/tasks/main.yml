@@ -4,5 +4,4 @@
   become: yes
   reboot:
     reboot_timeout: 30
-  async: 1
   poll: 0
