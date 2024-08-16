@@ -4,7 +4,7 @@
   become: yes
   reboot:
     reboot_timeout: 2
-  async: 1
+  #async: 1
   poll: 0
   failed_when: False
   when: reboot
